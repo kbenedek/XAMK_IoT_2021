@@ -1,8 +1,19 @@
 import socket
+import pygame.mixer
+from pygame.mixer import Sound
+import webbrowser
 
-client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-client.bind(("", 42069))
-while True:
-    data, addr = client.recvfrom(1024)
-    print("received message: %s"%data)
+pygame.mixer.init()
+
+client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP 
+client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1) 
+client.bind(("", 42069)) 
+while True: 
+    data, addr = client.recvfrom(1024) 
+    print("received message: {addr}".format(addr=addr))
+    bell = Sound("6.wav")
+    bell.play()
+    
+    ie = webbrowser.get()
+    ie.open("{addr}:{port}".format(addr=addr[0], port=8000))
+    
